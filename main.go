@@ -3,27 +3,29 @@ package main
 import (
 	"log"
 	"net/http"
-	"myapi/database"
-	"myapi/handlers"
+	"os"
 
 	"github.com/gorilla/mux"
+	"myapi/config"
+	"myapi/routes"
 )
 
 func main() {
-	// Connect to MongoDB
-	database.ConnectMongoDB("mongodb://localhost:27017")
+	// Load MongoDB connection
+	database.ConnectMongoDB()
 
-	// Setup Router
-	r := mux.NewRouter()
+	// Initialize router
+	router := mux.NewRouter()
 
-	// Routes
-	r.HandleFunc("/users", handlers.CreateUser).Methods("POST")
-	r.HandleFunc("/users", handlers.GetUsers).Methods("GET")
-	r.HandleFunc("/user", handlers.GetUser).Methods("GET")
-	r.HandleFunc("/user", handlers.UpdateUser).Methods("PUT")
-	r.HandleFunc("/user", handlers.DeleteUser).Methods("DELETE")
+	// Define API routes
+	routes.RegisterRoutes(router)
 
-	// Start Server
-	log.Println("Server started at :8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	// Start server
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default port
+	}
+
+	log.Printf("Server running on port %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
