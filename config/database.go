@@ -14,7 +14,7 @@ var DB *mongo.Client
 
 func ConnectMongoDB() {
 	// Ambil MongoDB URI dari environment variable
-	uri := os.Getenv("MONGOSTRING")
+	uri := os.Getenv("MONGO_URI")
 	if uri == "" {
 		log.Fatalf("Environment variable MONGO_URI tidak ditemukan. Pastikan sudah diatur di secrets atau variable repository.")
 	}

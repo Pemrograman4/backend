@@ -12,5 +12,5 @@ jobs:
 
       - name: Run application
         env:
-          MONGSTRING: ${{ secrets.MONGOSTRING }}
+        MONGO_URI: ${{ secrets.MONGO_URI}}
         run: go run main.go
