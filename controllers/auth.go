@@ -1,16 +1,15 @@
 package auth
 
 import (
+	"context"
 	"encoding/json"
 	"myapi/config"
 	"myapi/models"
 	"net/http"
 	"time"
-	"context"
 
 	"github.com/golang-jwt/jwt/v4"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive" // Import ini diperlukan
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -67,7 +66,6 @@ func GetUserFromDatabase(username string) (*models.User, error) {
 	return &user, nil
 }
 
-
 // HashPassword hashes a password string using bcrypt
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -99,7 +97,7 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Access granted to protected route!"})
 }
 
-//register function
+// register function
 func Register(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	err := json.NewDecoder(r.Body).Decode(&user)
